@@ -3,6 +3,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
+import tradeRoutes from "./routes/tradeRoutes";
 
 const app: Application = express();
 
@@ -12,11 +13,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "../public")));
 // Routes
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
 });
+app.use("/trade", tradeRoutes);
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
