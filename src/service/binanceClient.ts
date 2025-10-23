@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const fetchHistoryData = async (
   symbol: string,
   startTime: string,
