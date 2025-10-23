@@ -1,14 +1,7 @@
+import { KlineData } from "@/types/data";
 import { analyzeData } from "../utils/analyzeData";
 import axios from "axios";
-export interface KlineData {
-  openTime: number;
-  open: string;
-  high: string;
-  low: string;
-  close: string;
-  volume: string;
-  closeTime: number;
-}
+
 export const fetchHistoryData = async (
   symbol: string,
   startTime: number,

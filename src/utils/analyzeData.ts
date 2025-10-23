@@ -1,9 +1,5 @@
-export interface changeData {
-  from: number;
-  to: number;
-  delta: number;
-  percentage: number;
-}
+import { changeData } from "@/types/data";
+
 export const analyzeData = (prices: number[]) => {
   const change: changeData[] = [];
   for (let i = 0; i < prices.length; i++) {
