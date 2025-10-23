@@ -12,6 +12,11 @@ export const getPriceChanges = async (req: Request, res: Response) => {
       Number(endTime),
       Number(limit) || 100
     );
+    if (klines.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No data found for the given symbol and time range" });
+    }
     const analysis = await analyzeMarketData(klines);
     return res.status(200).json({ symbol, analysis });
   } catch (error) {

@@ -28,10 +28,7 @@ export const fetchHistoryData = async (
       closeTime: item[6],
     }));
   } catch (error) {
-    console.error((error as Error).message);
-    throw new Error(
-      "Failed to fetch history data: " + (error as Error).message
-    );
+    throw new Error("Failed to fetch history data: " + error);
   }
 };
 export const analyzeMarketData = async (klines: KlineData[]) => {

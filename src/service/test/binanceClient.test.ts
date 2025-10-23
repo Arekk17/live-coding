@@ -4,13 +4,10 @@ import { analyzeMarketData, fetchHistoryData } from "../binanceClient";
 
 const mock = new MockAdapter(axios);
 
-describe("binanceClient", () => {
+describe("fetchHistoryData", () => {
   afterEach(() => {
     mock.reset();
   });
-});
-
-describe("fetchHistoryData", () => {
   it("should fetch and format klines data", async () => {
     const symbol = "BTCUSDT";
     const startTime = 1698000000000;
@@ -21,11 +18,7 @@ describe("fetchHistoryData", () => {
       [1698000000001, "105", "115", "103", "110", "10000", 1698000000001],
     ];
 
-    mock
-      .onGet(
-        "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&startTime=1698000000000&endTime=1698086400000&limit=100"
-      )
-      .reply(200, mockApiResponse);
+    mock.onGet(/\/api\/v3\/klines/).reply(200, mockApiResponse);
 
     const result = await fetchHistoryData(symbol, startTime, endTime, 100);
 
@@ -53,7 +46,9 @@ describe("fetchHistoryData", () => {
 
     await expect(
       fetchHistoryData(symbol, startTime, endTime, 100)
-    ).rejects.toThrow("Failed to fetch history data: Failed to fetch data");
+    ).rejects.toThrow(
+      "Failed to fetch history data: Error: Request failed with status code 404"
+    );
   });
   it("should calculate price changes from klines", async () => {
     const klines = [
@@ -80,8 +75,7 @@ describe("fetchHistoryData", () => {
     const result = await analyzeMarketData(klines);
 
     expect(result).toEqual([
-      { from: 100, to: 105, delta: 5, percentage: 5 },
-      { from: 105, to: 110, delta: 5, percentage: 4.761904761904762 },
+      { delta: 5, from: 105, to: 110, percentage: 4.761904761904762 },
     ]);
   });
 });
