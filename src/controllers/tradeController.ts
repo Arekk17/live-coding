@@ -1,22 +1,21 @@
-import { fetchHistoryData } from "@/service/binanceClient";
+import { analyzeMarketData, fetchHistoryData } from "../service/binanceClient";
 import { Request, Response } from "express";
-import { analyzeData } from "@/utils/analyzeData";
-
 export const getPriceChanges = async (req: Request, res: Response) => {
   try {
-    const { symbol, startTime, endTime } = req.query;
+    const { symbol, startTime, endTime, limit } = req.query;
     if (!symbol || !startTime || !endTime) {
       return res.status(400).json({ error: "Missing required parameters" });
     }
-    const data = await fetchHistoryData(
+    const klines = await fetchHistoryData(
       symbol as string,
-      startTime as string,
-      endTime as string
+      Number(startTime),
+      Number(endTime),
+      Number(limit) || 100
     );
-    const analysis = analyzeData(data);
-    res.json(analysis);
+    const analysis = await analyzeMarketData(klines);
+    return res.status(200).json({ symbol, analysis });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Failed to analyze market data" });
   }
 };
