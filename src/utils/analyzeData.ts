@@ -5,7 +5,6 @@ export interface changeData {
   percentage: number;
 }
 export const analyzeData = (prices: number[]) => {
-  console.log("@@@prices", prices);
   const change: changeData[] = [];
   for (let i = 0; i < prices.length; i++) {
     const from = prices[i - 1];
