@@ -1,70 +1,75 @@
-# Express TypeScript MongoDB API
+# Binance trading bot (Node.js + typescript)
 
-Pusta struktura Express.js z TypeScript i MongoDB.
+Simple app that fetches data from binance API analyzes prices
 
-## Struktura projektu
+## Technologies
 
-```
-src/
-├── config/
-│   └── database.ts      # Konfiguracja MongoDB
-├── controllers/         # Kontrolery
-├── middleware/          # Middleware
-├── models/
-│   └── User.ts         # Model użytkownika
-├── routes/
-│   ├── index.ts        # Główna trasa
-│   └── users.ts        # Trasy użytkowników
-├── app.ts              # Konfiguracja Express
-└── server.ts           # Punkt wejścia aplikacji
-```
+- Node.js
+- Express.js
+- Axios
+- Docker + Docker compose
 
-## Instalacja
+## Local Setup
+
+1. Clone the repository and install dependecies
 
 ```bash
+git clone <REPO_URL>
+cd <PROJECT_NAME>
 npm install
 ```
 
-## Konfiguracja
+2. create a .env file
 
-1. Skopiuj `.env.example` do `.env`:
+- MONGO_URL = mongodb://mongo:27017/live-coding
+- PORT = 3000
+- BINANCE_API_KEY = <Your binance api key>
+- BINANCE_SECRET_KEY = <Your binance api secret key>
 
-```bash
-cp .env.example .env
-```
+3. Start aplications
 
-2. Edytuj zmienne środowiskowe w `.env`
-
-## Uruchomienie
-
-### Tryb development
+### localy
 
 ```bash
 npm run dev
 ```
 
-### Tryb production
+### docker
+
+1. build and start the container:
 
 ```bash
-npm run build
-npm start
+docker compose up --build
 ```
 
-## Dostępne skrypty
+2. Aplication URL
 
-- `npm run dev` - Uruchomienie w trybie development z hot reload
-- `npm run build` - Kompilacja TypeScript do JavaScript
-- `npm run build:watch` - Kompilacja w trybie watch
-- `npm start` - Uruchomienie skompilowanej aplikacji
-- `npm run clean` - Usunięcie katalogu dist
+- http://localhost:3000
+- mongodb://localhost:27017
 
-## API Endpoints
+# Test API
 
-- `GET /` - Główny endpoint
-- `GET /users` - Lista użytkowników
+- GET localhost:3000/trade/history?symbol=BTCUSDT&startTime=1698000000000&endTime=1698086400000&limit=10
+  fetches recent trades for symbol and return analysis
 
-## Wymagania
+### Example response
 
-- Node.js
-- MongoDB
-- npm
+{
+"symbol": "BTCUSDT",
+"analysis": [
+{
+"to": 29908.8,
+"delta": null,
+"percentage": null
+},
+]
+}
+
+# Project Structure
+
+src/
+service/binanceClient.ts
+controller/tradeController.ts
+utils/analyzeData.ts
+app.ts
+server.ts
